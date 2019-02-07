@@ -5,7 +5,7 @@ namespace Drupal\internsd8\Controller;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Defines HelloController class.
+ * Controller routines for block example routes.
  */
 class Internsd8Controller extends ControllerBase {
 

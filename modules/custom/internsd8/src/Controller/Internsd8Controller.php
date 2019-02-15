@@ -18,7 +18,7 @@ class Internsd8Controller extends ControllerBase {
   public function content() {
     return [
       '#type' => 'markup',
-      '#markup' => $this->t('Hello, World!'),
+      '#markup' => $this->t("<h1>Hello, World!</h1>"),
     ];
   }
 

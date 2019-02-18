@@ -51,6 +51,8 @@ class NotificationsManager extends FormBase
             'options' => ['data' => t('Options'), 'colspan' => '4'],
         ];
 
+        // Drop down menu for actions that apply to table rows that have been
+        // selected using the provided checkboxes.
         $form['action'] = [
             '#type' => 'select',
             '#title' => $this
@@ -70,21 +72,34 @@ class NotificationsManager extends FormBase
         // Build the Drupal Tableselect options array.
         $options = array();
         foreach ($entities as $key => $entity) {
-            // Create the view link present in the final table.
-            $viewLink = Link::createFromRoute('View',
-                'entity.node.canonical', ['node' => $key]);
+            // Create view, delete, publish, unpublish links.
+            $viewLink = Link::createFromRoute(
+                'View',
+                'entity.node.canonical',
+                ['node' => $key]
+            );
 
-            $deleteLink = Link::createFromRoute('Delete',
-                'entity.node.delete_form', ['node' => $key]);
+            $deleteLink = Link::createFromRoute(
+                'Delete',
+                'entity.node.delete_form',
+                ['node' => $key]
+            );
 
-            // $publishLink = Link::createFromRoute('Publish',
-            //     'custom_notification.publish', ['node' => $key]);
+            $publishLink = Link::fromTextAndUrl(
+                'Publish',
+                Url::fromRoute(
+                    'custom_notification.publish',
+                    ['node' => $key]
+                )
+            );
 
-            $url = Url::fromRoute('custom_notification.publish', ['node' => $key]);
-            $publishLink = Link::fromTextAndUrl('Publish', $url);
-
-            $url = Url::fromRoute('custom_notification.unpublish', ['node' => $key]);
-            $unpublishLink = Link::fromTextAndUrl('Unpublish', $url);
+            $unpublishLink = Link::fromTextAndUrl(
+                'Unpublish',
+                Url::fromRoute(
+                    'custom_notification.unpublish',
+                    ['node' => $key]
+                )
+            );
 
             // The string 'created' is a key in the entity attribute array.
             // notification[created] = the notification created date.
@@ -105,7 +120,8 @@ class NotificationsManager extends FormBase
                 $key => [
                     'title' => $entity->get('title')->value,
                     'created' => $formattedDate,
-                    'options' => [$viewLink, $deleteLink, $publishLink, $unpublishLink],
+                    'options' => [$viewLink, $deleteLink, $publishLink,
+                        $unpublishLink],
                 ],
             );
         }
@@ -118,6 +134,7 @@ class NotificationsManager extends FormBase
                 ->t('No users found'),
         );
 
+        // Submit button to submit actions that apply to selected table rows.
         $form['submit'] = [
             '#type' => 'submit',
             '#value' => $this->t('Submit'),
@@ -131,12 +148,16 @@ class NotificationsManager extends FormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
+        // Selected using checkboxes in table.
         $selectedNodeIds = $form_state->getValue('table');
+
+        // Dropdown menu selection.
         $action = $form_state->getValue('action');
-        $routeParameters = array();
 
         switch ($action) {
             case 1:
+                // Construct url string to trigger contextual filter for
+                // notification view.
                 $urlString = 'base:/selected-notifications/';
 
                 $isFirst = true;
@@ -149,28 +170,38 @@ class NotificationsManager extends FormBase
                     }
                 }
 
-                $url = \Drupal\Core\Url::fromUri($urlString, ['absolute' => true]);
+                $url = \Drupal\Core\Url::fromUri($urlString,
+                    ['absolute' => true]);
+
                 return $form_state->setRedirectUrl($url);
+
             case 2:
+                // Set published for all nodes selected using checkboxes.
                 foreach ($selectedNodeIds as $nid) {
                     $node = \Drupal\node\Entity\Node::load($nid);
                     $node->setPublished(true);
                     $node->save();
                 }
                 break;
+
             case 3:
+                // Set unpublished for all notifications selected using
+                // checkboxes.
                 foreach ($selectedNodeIds as $nid) {
                     $node = \Drupal\node\Entity\Node::load($nid);
                     $node->setPublished(false);
                     $node->save();
                 }
                 break;
+
             case 4:
+                // Delete notifications selected using checkboxes.
                 foreach ($selectedNodeIds as $nid) {
                     $entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
                     $entity->delete();
                 }
                 break;
+
             default:
                 break;
         }

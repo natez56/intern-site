@@ -13,19 +13,21 @@ class UnpublishNodeController extends ControllerBase
 {
 
     /**
-     * Display the markup.
-     *
-     * @return array
-     *   Return markup array.
+     * Sets node parameter passed in route to published.
+     * Redirects back to notification manager when complete.
      */
     public function content()
     {
-        $parameters = \Drupal::routeMatch()->getParameters();
-        $val = $parameters->get('node');
-        $url = Url::fromRoute('custom_notification.manager');
-        $node = \Drupal\node\Entity\Node::load($val);
+        $nid = \Drupal::routeMatch()->getParameters('node');
+
+        // Get node passed in route and set to published.
+        $node = \Drupal\node\Entity\Node::load($nid);
         $node->setPublished(false);
         $node->save();
+
+        // Route to notification manager.
+        $url = Url::fromRoute('custom_notification.manager');
+
         return $this->redirect($url->getRouteName());
     }
 

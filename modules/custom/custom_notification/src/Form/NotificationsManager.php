@@ -26,21 +26,21 @@ class NotificationsManager extends FormBase
     public function buildForm(array $form, FormStateInterface $form_state)
     {
         // Content type created ahead of time in Drupal site builder.
-        $entityType = 'notification';
+        $nodeType = 'notification';
         // Content status. True means this query will grab published content.
-        $isPublished = true;
+        $publishedStatus = [false, true];
 
         $query = \Drupal::entityQuery('node');
 
-        $query->condition('status', [0, 1], 'IN');
-        $query->condition('type', $entityType);
+        $query->condition('status', $publishedStatus, 'IN');
+        $query->condition('type', $nodeType);
 
-        $entityIds = $query->execute();
+        $nodeIds = $query->execute();
 
         // Gets an array of notification objects.
-        $entities = (
+        $nodeArray = (
             \Drupal::entityTypeManager()->getStorage('node')
-                ->loadMultiple($entityIds)
+                ->loadMultiple($nodeIds)
         );
 
         $header = [
@@ -71,7 +71,7 @@ class NotificationsManager extends FormBase
 
         // Build the Drupal Tableselect options array.
         $options = array();
-        foreach ($entities as $key => $entity) {
+        foreach ($nodeArray as $key => $node) {
             // Create view, delete, publish, unpublish links.
             $viewLink = Link::createFromRoute(
                 'View',
@@ -105,7 +105,7 @@ class NotificationsManager extends FormBase
             // notification[created] = the notification created date.
             // It must be accessed with a get method because the entity's
             // values are protected variables.
-            $createdDate = $entity->get('created')->value;
+            $createdDate = $node->get('created')->value;
 
             // Modify the 'M D Y h i' string to change date format.
             // For instance 'M D' will display month and day.
@@ -118,7 +118,7 @@ class NotificationsManager extends FormBase
             // the node id of the notification touched on this iteration.
             $options += array(
                 $key => [
-                    'title' => $entity->get('title')->value,
+                    'title' => $node->get('title')->value,
                     'created' => $formattedDate,
                     'options' => [$viewLink, $deleteLink, $publishLink,
                         $unpublishLink],
@@ -178,9 +178,11 @@ class NotificationsManager extends FormBase
             case 2:
                 // Set published for all nodes selected using checkboxes.
                 foreach ($selectedNodeIds as $nid) {
-                    $node = \Drupal\node\Entity\Node::load($nid);
-                    $node->setPublished(true);
-                    $node->save();
+                    if ($nid) {
+                        $node = \Drupal\node\Entity\Node::load($nid);
+                        $node->setPublished(true);
+                        $node->save();
+                    }
                 }
                 break;
 
@@ -188,17 +190,22 @@ class NotificationsManager extends FormBase
                 // Set unpublished for all notifications selected using
                 // checkboxes.
                 foreach ($selectedNodeIds as $nid) {
-                    $node = \Drupal\node\Entity\Node::load($nid);
-                    $node->setPublished(false);
-                    $node->save();
+                    if ($nid) {
+                        $node = \Drupal\node\Entity\Node::load($nid);
+                        $node->setPublished(false);
+                        $node->save();
+                    }
                 }
                 break;
 
             case 4:
                 // Delete notifications selected using checkboxes.
                 foreach ($selectedNodeIds as $nid) {
-                    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
-                    $entity->delete();
+                    if ($nid) {
+                        $node = \Drupal::entityTypeManager()
+                            ->getStorage('node')->load($nid);
+                        $node->delete();
+                    }
                 }
                 break;
 

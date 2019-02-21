@@ -49,18 +49,20 @@ class NotificationForm extends ConfigFormBase
             '#default_value' => $config->get('checkbox'),
         ];
 
+        $form['text']['#markup'] = '<br><h3>Display notifications created between: </h3>';
+
         // The date populating '#default_value is stored in the settings.yml
         // file as a string so it needs to be converted to a new
         // DrupalDateTime object.
         $form['start_time'] = [
             '#type' => 'datetime',
-            '#title' => $this->t('Start'),
+            '#title' => $this->t('Start Date'),
             '#default_value' => new DrupalDateTime($config->get('start')),
         ];
 
         $form['end_time'] = [
             '#type' => 'datetime',
-            '#title' => $this->t('End'),
+            '#title' => $this->t('End Date'),
             '#default_value' => new DrupalDateTime($config->get('end')),
         ];
 

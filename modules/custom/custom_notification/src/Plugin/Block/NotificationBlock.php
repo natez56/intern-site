@@ -3,10 +3,12 @@
 namespace Drupal\custom_notification\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'Hello' Block.
+ * Provides a 'Notification' Block.
  *
  * @Block(
  *   id = "notification_block",
@@ -14,11 +16,47 @@ use Drupal\Core\Datetime\DrupalDateTime;
  *   category = @Translation("Notification Block"),
  * )
  */
-class NotificationBlock extends BlockBase
+class NotificationBlock extends BlockBase implements ContainerFactoryPluginInterface
 {
+    /**
+     * @var $config \Drupal\Core\Config\ConfigFactory
+     */
+    protected $config;
+    protected $notificationManager;
 
     /** @var string Config settings */
     const SETTINGS = 'custom_notification.settings.yml';
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param array $configuration
+     * @param string $plugin_id
+     * @param mixed $plugin_definition
+     *
+     * @return static
+     */
+    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
+    {
+        return new static(
+            $configuration,
+            $plugin_id,
+            $plugin_definition
+            // $container->get('custom_notification.notification_manager')
+        );
+    }
+
+    /**
+     * @param array $configuration
+     * @param string $plugin_id
+     * @param mixed $plugin_definition
+     * @param \Drupal\Core\Config\ConfigFactory $config
+     * @param Drupal\custom_notification\Services\NotificationManager
+     */
+    public function __construct(array $configuration, $plugin_id, $plugin_definition)
+    {
+        parent::__construct($configuration, $plugin_id, $plugin_definition);
+        $this->notificationManager = \Drupal::service('custom_notification.notification');
+    }
 
     /**
      * {@inheritdoc}
@@ -33,67 +71,14 @@ class NotificationBlock extends BlockBase
      */
     public function build()
     {
-        // Get config settings from notification settings on site.
-        $notificationIsEnabled = \Drupal::config(static::SETTINGS)->get('checkbox');
+        $entityType = 'node';
+        $view_mode = 'teaser';
 
-        if ($notificationIsEnabled) {
-            // Get start time from user selected settings on site.
-            $notificationStart = \Drupal::config(static::SETTINGS)->get('start');
-
-            // Get end time from user selected settings on site.
-            $notificationEnd = \Drupal::config(static::SETTINGS)->get('end');
-            $nodeType = 'notification';
-
-            // Set to query both published and unpublished
-            $publishedStatus = [false, true];
-            $entityType = 'node';
-            $view_mode = 'teaser';
-
-            $query = \Drupal::entityQuery($entityType);
-
-            $query->condition('status', $publishedStatus, 'IN');
-            $query->condition('type', $nodeType);
-
-            $nodeIds = $query->execute();
-
-            // If no notification content exists display this message.
-            if (sizeof($nodeIds) < 1) {
-                return [
-                    '#type' => 'markup',
-                    '#markup' => $this->t('You have no notifications at this time.'),
-                ];
-            }
-
-            // Gets an array of notification objects.
-            $nodeArray = (
-                \Drupal::entityTypeManager()->getStorage($entityType)
-                    ->loadMultiple($nodeIds)
-            );
-
-            // Check created date of nodes to ensure they are within dates
-            // set by user on site under notification settings.
-            $blockContentArray = [];
-            foreach ($nodeArray as $node) {
-                if ($node->isPublished()) {
-                    $timeStamp = $node->get('created')->value;
-                    $createdDate = DrupalDateTime::createFromTimestamp($timeStamp, 'UTC');
-
-                    $startDate = new DrupalDateTime($notificationStart);
-                    $endDate = new DrupalDateTime($notificationEnd);
-
-                    if ($createdDate > $startDate && $createdDate < $endDate) {
-                        array_push($blockContentArray, $node);
-                    }
-                }
-            }
-
-            rsort($blockContentArray);
-
-            // First two elements of reversed sorted array correspond to
-            // the two most recent notifications.
-            if (sizeof($blockContentArray) > 2) {
-                $blockContentArray = array_slice($blockContentArray, 0, 2);
-            }
+        if ($this->notificationManager->isNotificationSettingEnabled()) {
+            $start = $this->notificationManager->getConfigStartDate();
+            $end = $this->notificationManager->getConfigEndDate();
+            $blockContentArray = $this->notificationManager->getRecentThreeNotifications($start, $end);
+            $blockContentArray = array_reverse($blockContentArray);
 
             $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entityType);
 

@@ -106,7 +106,9 @@ function drupal8_zymphonies_theme_preprocess_page(&$variables) {
   //To get the current URL
   $current_url  = \Drupal::request()->getRequestUri();
   $current_path = explode("/", $current_url);
-  $variables['current_path'] = $current_path[2];
+  if (isset($current_path[2])) {
+    $variables['current_path'] = $current_path[2];
+  }
   
   // Slider
   // Assign Variable for slider

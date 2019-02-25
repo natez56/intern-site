@@ -4,6 +4,7 @@ namespace Drupal\custom_notification\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,9 +21,12 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
 {
     /**
      * @var $config \Drupal\Core\Config\ConfigFactory
+     * @var $notificationManager \Drupal\custom_notification\Services
+     * @var $entityTypeManager \Drupal\Core\Entity\EntityTypeManager
      */
     protected $config;
     protected $notificationManager;
+    protected $entityTypeManager;
 
     /** @var string Config settings */
     const SETTINGS = 'custom_notification.settings.yml';
@@ -35,13 +39,14 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
      *
      * @return static
      */
-    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
-    {
+    public static function create(ContainerInterface $container,
+        array $configuration, $plugin_id, $plugin_definition) {
         return new static(
             $configuration,
             $plugin_id,
-            $plugin_definition
-            // $container->get('custom_notification.notification_manager')
+            $plugin_definition,
+            $container->get('custom_notification.notification'),
+            $container->get('entity_type.manager')
         );
     }
 
@@ -49,13 +54,15 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
      * @param array $configuration
      * @param string $plugin_id
      * @param mixed $plugin_definition
-     * @param \Drupal\Core\Config\ConfigFactory $config
      * @param Drupal\custom_notification\Services\NotificationManager
+     * @param Drupal\Core\Entity\EntityTypeManager
      */
-    public function __construct(array $configuration, $plugin_id, $plugin_definition)
-    {
+    public function __construct(array $configuration, $plugin_id,
+        $plugin_definition, $notificationManager,
+        EntityTypeManager $entityTypeManager) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
-        $this->notificationManager = \Drupal::service('custom_notification.notification');
+        $this->notificationManager = $notificationManager;
+        $this->entityTypeManager = $entityTypeManager;
     }
 
     /**
@@ -77,12 +84,18 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
         if ($this->notificationManager->isNotificationSettingEnabled()) {
             $start = $this->notificationManager->getConfigStartDate();
             $end = $this->notificationManager->getConfigEndDate();
-            $blockContentArray = $this->notificationManager->getRecentThreeNotifications($start, $end);
+
+            $blockContentArray = $this->notificationManager
+                ->getRecentThreeNotifications($start, $end);
+
+            // Reverse array since block shows index 0 at top.
             $blockContentArray = array_reverse($blockContentArray);
 
-            $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entityType);
+            $view_builder = $this->entityTypeManager
+                ->getViewBuilder($entityType);
 
-            $build = $view_builder->viewMultiple($blockContentArray, $view_mode);
+            $build = $view_builder
+                ->viewMultiple($blockContentArray, $view_mode);
 
             return $build;
         } else {

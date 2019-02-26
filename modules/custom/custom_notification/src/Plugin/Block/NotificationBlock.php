@@ -88,6 +88,13 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
             $blockContentArray = $this->notificationManager
                 ->getRecentThreeNotifications($start, $end);
 
+            if (empty($blockContentArray)) {
+                return [
+                    '#type' => 'markup',
+                    '#markup' => $this->t('No notifications at this time.'),
+                ];
+            }
+
             // Reverse array since block shows index 0 at top.
             $blockContentArray = array_reverse($blockContentArray);
 
@@ -99,10 +106,7 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
 
             return $build;
         } else {
-            return [
-                '#type' => 'markup',
-                '#markup' => $this->t('Hello, World!'),
-            ];
+            return null;
         }
 
     }

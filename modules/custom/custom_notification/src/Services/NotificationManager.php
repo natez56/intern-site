@@ -42,12 +42,7 @@ class NotificationManager
     public function __construct(EntityTypeManager $entityTypeManager,
         ConfigFactory $config, DrupalDateTime $drupalDateTime) {
         $this->entityTypeManager = $entityTypeManager;
-
-        // Query entities to construct a array of notification entities.
-        $this->notificationArray = $this->createNotificationArray();
-
-        $this->sortNotificationsByDateUpdated();
-
+        $this->notificationArray = null;
         $this->config = $config;
         $this->drupalDateTime = $drupalDateTime;
     }
@@ -100,6 +95,10 @@ class NotificationManager
      */
     public function getLatestNotification($start = null, $end = null)
     {
+        if (!$this->notificationArray) {
+            $this->createNotificationArray();
+        }
+
         if ($start || $end) {
             $validNotifications = $this->getNotificationsByDate($start, $end);
 
@@ -121,6 +120,10 @@ class NotificationManager
      */
     public function getNotificationCount($start = null, $end = null)
     {
+        if (!$this->notificationArray) {
+            $this->createNotificationArray();
+        }
+
         if ($start || $end) {
             $validNotifications = $this->getNotificationsByDate($start, $end);
             return count($validNotifications);
@@ -141,9 +144,12 @@ class NotificationManager
      */
     public function getRecentThreeNotifications($start = null, $end = null)
     {
+        if (!$this->notificationArray) {
+            $this->createNotificationArray();
+        }
+
         if ($start || $end) {
             $validNotifications = $this->getNotificationsByDate($start, $end);
-
             return array_slice($validNotifications, -3, 3);
         }
 
@@ -165,9 +171,11 @@ class NotificationManager
             ->condition('type', 'notification')
             ->execute();
 
-        return $this->entityTypeManager
+        $this->notificationArray = $this->entityTypeManager
             ->getStorage('node')
             ->loadMultiple($notificationIds);
+
+        $this->sortNotificationsByDateUpdated();
     }
 
     /**

@@ -339,10 +339,6 @@ nav h2{
   z-index: 9999;
 }
 
-#main-menu {
-  background-color: hotpink;
-}
-
 .region-primary-menu{
   display: none;
   background: #fff;

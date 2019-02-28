@@ -1,6 +1,6 @@
 services:
-  custom_notification.drupaldatetime:
-    class: Drupal\Core\Datetime\DrupalDateTime
+  custom_notification.date_manager:
+    class: Drupal\custom_notification\Services\DateManager
 
   custom_notification.notification:
     class: Drupal\custom_notification\Services\NotificationManager
@@ -8,5 +8,5 @@ services:
       [
         "@entity_type.manager",
         "@config.factory",
-        "@custom_notification.drupaldatetime",
+        "@custom_notification.date_manager",
       ]

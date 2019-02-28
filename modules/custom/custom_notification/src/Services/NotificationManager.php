@@ -3,8 +3,8 @@
 namespace Drupal\custom_notification\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\custom_notification\Services\DateManager;
 
 /**
  * Class NotificationManager.
@@ -27,9 +27,9 @@ class NotificationManager implements NotificationManagerInterface
     protected $configFactory;
 
     /**
-     * @var \Drupal\Core\Datetime\DrupalDateTime
+     * @var \Drupal\custom_notification\Services\DateManager
      */
-    protected $drupalDateTime;
+    protected $dateManager;
 
     /**
      * @var string
@@ -40,13 +40,13 @@ class NotificationManager implements NotificationManagerInterface
     /**
      * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
      * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-     * @param \Drupal\Core\DateTime\DrupalDateTime $drupalDateTime
+     * @param \Drupal\custom_notification\Services\DateManager $dateManager
      */
     public function __construct(EntityTypeManagerInterface $entityTypeManager,
-        ConfigFactoryInterface $configFactory, DrupalDateTime $drupalDateTime) {
+        ConfigFactoryInterface $configFactory, DateManager $dateManager) {
         $this->entityTypeManager = $entityTypeManager;
         $this->configFactory = $configFactory;
-        $this->drupalDateTime = $drupalDateTime;
+        $this->dateManager = $dateManager;
     }
 
     /**
@@ -190,15 +190,15 @@ class NotificationManager implements NotificationManagerInterface
         $validNotifications = [];
 
         if (isset($startDate)) {
-            $startDate = new $this->drupalDateTime($startDate);
+            $startDate = $this->dateManager->getDateFromString($startDate);
         }
 
         if (isset($endDate)) {
-            $endDate = new $this->drupalDateTime($endDate);
+            $endDate = $this->dateManager->getDateFromString($endDate);
         }
 
         foreach ($this->getAllNotifications() as $notification) {
-            $createdDate = $this->drupalDateTime->createFromTimestamp($notification
+            $createdDate = $this->dateManager->createFromTimestamp($notification
                     ->get('created')->value);
 
             if (isset($startDate) && isset($endDate)) {
@@ -216,7 +216,6 @@ class NotificationManager implements NotificationManagerInterface
             }
 
         }
-
         return $validNotifications;
     }
 }

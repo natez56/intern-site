@@ -52,7 +52,7 @@ interface NotificationManagerInterface
      * @return object
      *   Notification entity object
      */
-    public function getLatestNotification(string $startDate, string $endDate);
+    public function getLatestNotification($startDate, $endDate);
     /**
      * Returns the number of published notifications.
      *
@@ -63,7 +63,7 @@ interface NotificationManagerInterface
      * @return int
      *   The number of notifications
      */
-    public function getNotificationCount(string $startDate, string $endDate);
+    public function getNotificationCount($startDate, $endDate);
 
     /**
      * Returns array of nodes by updated date and published.
@@ -75,5 +75,5 @@ interface NotificationManagerInterface
      * @return object[]
      *   Array of notification entity objects.
      */
-    public function getRecentThreeNotifications(string $startDate, string $endDate);
+    public function getRecentThreeNotifications($startDate, $endDate);
 }

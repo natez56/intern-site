@@ -3,9 +3,9 @@
 namespace Drupal\custom_notification\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\custom_notification\Services\NotificationManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -54,12 +54,12 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
      * @param array $configuration
      * @param string $plugin_id
      * @param mixed $plugin_definition
-     * @param Drupal\custom_notification\Services\NotificationManager
-     * @param Drupal\Core\Entity\EntityTypeManager
+     * @param Drupal\custom_notification\Services\NotificationManagerInterface
+     * @param Drupal\Core\Entity\EntityTypeManagerInterface
      */
     public function __construct(array $configuration, $plugin_id,
-        $plugin_definition, $notificationManager,
-        EntityTypeManager $entityTypeManager) {
+        $plugin_definition, NotificationManagerInterface $notificationManager,
+        EntityTypeManagerInterface $entityTypeManager) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
         $this->notificationManager = $notificationManager;
         $this->entityTypeManager = $entityTypeManager;
@@ -79,14 +79,14 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
     public function build()
     {
         $entityType = 'node';
-        $view_mode = 'teaser';
+        $viewMode = 'teaser';
 
         if ($this->notificationManager->isNotificationSettingEnabled()) {
-            $start = $this->notificationManager->getConfigStartDate();
-            $end = $this->notificationManager->getConfigEndDate();
+            $startDate = $this->notificationManager->getConfigStartDate();
+            $endDate = $this->notificationManager->getConfigEndDate();
 
             $blockContentArray = $this->notificationManager
-                ->getRecentThreeNotifications($start, $end);
+                ->getRecentThreeNotifications($startDate, $endDate);
 
             if (empty($blockContentArray)) {
                 return [
@@ -102,7 +102,7 @@ class NotificationBlock extends BlockBase implements ContainerFactoryPluginInter
                 ->getViewBuilder($entityType);
 
             $build = $view_builder
-                ->viewMultiple($blockContentArray, $view_mode);
+                ->viewMultiple($blockContentArray, $viewMode);
 
             return $build;
         } else {

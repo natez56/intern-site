@@ -2,204 +2,170 @@
 
 namespace Drupal\custom_notification\Services;
 
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Class NotificationManager.
  */
-class NotificationManager
+class NotificationManager implements NotificationManagerInterface
 {
     /**
-     * @var $entityTypeManager \Drupal\Core\Entity\EntityTypeManager
+     * @var \Drupal\Core\Entity\EntityTypeManagerInterface
      */
     protected $entityTypeManager;
 
     /**
-     * @var $notificationArray \Drupal\custom_notification\Services
+     * @var object[]
      */
-    protected $notificationArray;
+    protected $notifications;
 
     /**
-     * @var $config \Drupal\Core\Config\ConfigFactory
+     * @var \Drupal\Core\Config\ConfigFactoryInterface
      */
-    protected $config;
+    protected $configFactory;
 
     /**
-     * @var $drupalDateTime \Drupal\Core\Datetime\DrupalDateTime
+     * @var \Drupal\Core\Datetime\DrupalDateTime
      */
     protected $drupalDateTime;
 
-    /** @var string Config settings */
+    /**
+     * @var string
+     *   Config settings
+     */
     const SETTINGS = 'custom_notification.settings.yml';
 
     /**
-     * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
-     * @param \Drupal\Core\Config\ConfigFactory $config
+     * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+     * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
      * @param \Drupal\Core\DateTime\DrupalDateTime $drupalDateTime
      */
-    public function __construct(EntityTypeManager $entityTypeManager,
-        ConfigFactory $config, DrupalDateTime $drupalDateTime) {
+    public function __construct(EntityTypeManagerInterface $entityTypeManager,
+        ConfigFactoryInterface $configFactory, DrupalDateTime $drupalDateTime) {
         $this->entityTypeManager = $entityTypeManager;
-        $this->notificationArray = null;
-        $this->config = $config;
+        $this->configFactory = $configFactory;
         $this->drupalDateTime = $drupalDateTime;
     }
 
     /**
-     * Get notifications enabled information.
-     *
-     * @return bool
-     *   True if notifications are enabled.
+     * {@inheritdoc}
      */
-    public function isNotificationSettingEnabled()
+    public function getAllNotifications()
     {
-        return $this->config->get(static::SETTINGS)->get('checkbox');
+        if (!isset($this->notifications)) {
+            $this->loadNotifications();
+        }
+
+        return $this->notifications;
     }
 
     /**
-     * Get config notification start time settings.
-     *
-     * @return string
-     *   The date string representing the cutoff indicating that dates must
-     *   be after this date to be displayed.
+     * Loads notifications and sorts them by date updated.
      */
-    public function getConfigStartDate()
+    protected function loadNotifications()
     {
-        return $this->config->get(static::SETTINGS)->get('start');
-    }
+        $this->notifications = [];
 
-    /**
-     * Get config notification end time settings.
-     *
-     * @return string
-     *   The date string representing the cutoff for dates to be displayed.
-     *   Dates must be lower that this result to be displayed.
-     */
-    public function getConfigEndDate()
-    {
-        return $this->config->get(static::SETTINGS)->get('end');
-    }
-
-    /**
-     * Get latest updated notification that is published within specified range.
-     * If range is not included then return most recent of all notifications.
-     *
-     * @param string $start
-     *   Date string
-     * @param string $end
-     *   Date string
-     * @return object
-     *   Notification entity object
-     */
-    public function getLatestNotification($start = null, $end = null)
-    {
-        if (!$this->notificationArray) {
-            $this->createNotificationArray();
-        }
-
-        if ($start || $end) {
-            $validNotifications = $this->getNotificationsByDate($start, $end);
-
-            return end($validNotifications);
-        }
-
-        return end($this->notificationArray);
-
-    }
-    /**
-     * Returns the number of published notifications.
-     *
-     * @param string $start
-     *   Date string
-     * @param string $end
-     *   Date string
-     * @return int
-     *   The number of notifications
-     */
-    public function getNotificationCount($start = null, $end = null)
-    {
-        if (!$this->notificationArray) {
-            $this->createNotificationArray();
-        }
-
-        if ($start || $end) {
-            $validNotifications = $this->getNotificationsByDate($start, $end);
-            return count($validNotifications);
-        }
-
-        return count($this->notificationArray);
-    }
-
-    /**
-     * Returns array of nodes by updated date and published.
-     *
-     * @param string $start
-     *   Date string
-     * @param string $end
-     *   Date string
-     * @return object[]
-     *   Array of notification entity objects.
-     */
-    public function getRecentThreeNotifications($start = null, $end = null)
-    {
-        if (!$this->notificationArray) {
-            $this->createNotificationArray();
-        }
-
-        if ($start || $end) {
-            $validNotifications = $this->getNotificationsByDate($start, $end);
-            return array_slice($validNotifications, -3, 3);
-        }
-
-        return array_slice($this->notificationArray, -3, 3);
-    }
-
-    /**
-     * Query current notifications.
-     *
-     * @return object[]
-     *   Array of notification objects.
-     */
-    private function createNotificationArray()
-    {
-        $notificationIds = $this->entityTypeManager
+        $nids = $this->entityTypeManager
             ->getStorage('node')
             ->getQuery()
             ->condition('status', 1)
             ->condition('type', 'notification')
             ->execute();
 
-        $this->notificationArray = $this->entityTypeManager
-            ->getStorage('node')
-            ->loadMultiple($notificationIds);
+        if ($nids) {
+            $this->notifications = $this->entityTypeManager
+                ->getStorage('node')
+                ->loadMultiple($nids);
+        }
 
         $this->sortNotificationsByDateUpdated();
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isNotificationSettingEnabled()
+    {
+        return $this->configFactory->get(static::SETTINGS)->get('checkbox');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfigStartDate()
+    {
+        return $this->configFactory->get(static::SETTINGS)->get('start');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfigEndDate()
+    {
+        return $this->configFactory->get(static::SETTINGS)->get('end');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLatestNotification($startDate = null, $endDate = null)
+    {
+        if (isset($startDate) || isset($endDate)) {
+            return end($this->getNotificationsByDate($startDate, $endDate));
+        }
+
+        return end($this->getAllNotifications());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNotificationCount($startDate = null, $endDate = null)
+    {
+        if (isset($startDate) || isset($endDate)) {
+            return count($this->getNotificationsByDate($startDate, $endDate));
+        }
+
+        return count($this->getAllNotifications());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRecentThreeNotifications($startDate = null, $endDate = null)
+    {
+        if (isset($startDate) || isset($endDate)) {
+            return array_slice($this->getNotificationsByDate($startDate, $endDate), -3, 3);
+        }
+
+        return array_slice($this->getAllNotifications(), -3, 3);
+    }
+
+    /**
      * Sorts array by date.
      */
-    private function sortNotificationsByDateUpdated()
+    protected function sortNotificationsByDateUpdated()
     {
-        usort($this->notificationArray, [$this, 'cmpDate']);
+        usort($this->notifications, [$this, 'cmpDate']);
     }
 
     /**
      * Helper function for usort to sort by date.
      *
-     * @param object $a
+     * @param object $entityA
      *   Notification entity object.
-     * @param object $b
+     * @param object $entityB
      *   Notification entity object.
      * @return int
      *   Int used as the return value that usort will receive.
      */
-    private function cmpDate($a, $b)
+    protected function cmpDate($entityA, $entityB)
     {
-        $aDate = $a->get('changed')->value;
-        $bDate = $b->get('changed')->value;
+        $aDate = $entityA->get('changed')->value;
+        $bDate = $entityB->get('changed')->value;
 
         if ($aDate == $bDate) {
             return 0;
@@ -212,39 +178,39 @@ class NotificationManager
      * Use config settings to look for valid notifications that have created
      * dates between the config settings dates.
      *
-     * @param string $start
+     * @param string $startDate
      *   Date string
-     * @param string $end
+     * @param string $endDate
      *   Date string
      * @return object[]
      *   Array of notification entity objects.
      */
-    private function getNotificationsByDate($start = null, $end = null)
+    protected function getNotificationsByDate($startDate = null, $endDate = null)
     {
         $validNotifications = [];
 
-        if ($start) {
-            $start = new $this->drupalDateTime($start);
+        if (isset($startDate)) {
+            $startDate = new $this->drupalDateTime($startDate);
         }
 
-        if ($end) {
-            $end = new $this->drupalDateTime($end);
+        if (isset($endDate)) {
+            $endDate = new $this->drupalDateTime($endDate);
         }
 
-        foreach ($this->notificationArray as $notification) {
+        foreach ($this->getAllNotifications() as $notification) {
             $createdDate = $this->drupalDateTime->createFromTimestamp($notification
                     ->get('created')->value);
 
-            if ($start && $end) {
-                if ($createdDate > $start && $createdDate < $end) {
+            if (isset($startDate) && isset($endDate)) {
+                if ($createdDate > $startDate && $createdDate < $endDate) {
                     array_push($validNotifications, $notification);
                 }
-            } else if ($start) {
-                if ($createdDate > $start) {
+            } else if (isset($startDate)) {
+                if ($createdDate > $startDate) {
                     array_push($validNotifications, $notification);
                 }
             } else {
-                if ($createdDate < $end) {
+                if ($createdDate < $endDate) {
                     array_push($validNotifications, $notification);
                 }
             }

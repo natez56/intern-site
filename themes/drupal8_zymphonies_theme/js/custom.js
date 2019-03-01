@@ -21,7 +21,8 @@ jQuery(document).ready(function($){
     });
 		
 	$('selector').onmousehover( function(){
-	$(this).find("div").html(
+		// event.preventDefault() ??? 
+ 	$(this).find("div").html(
 		<div>
 			<a href="/home/submenu1">home submenu1</a>
 			<a href="/home/submenu2">home submenu2</a>

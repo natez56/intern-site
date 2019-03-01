@@ -339,6 +339,48 @@ nav h2{
   z-index: 9999;
 }
 
+/* <a href="/" data-drupal-link-system-path="<front>" class="is-active">Home</a> 
+  This is the selector for "Home"
+*/
+
+a[data-drupal-link-system-path="<front>"] {
+  color: red;
+  /* animation: pulse .5s infinite; */
+}
+
+/* @keyframes pulse {
+  0% {
+    background-color: yellow;
+  }
+  100% {
+    background-color: hotpink;
+  }
+} */
+
+/* <a href="/the-interns" data-drupal-link-system-path="the-interns">Recent Posts</a> 
+  This is the selector for "Recent Posts"
+*/
+
+a[data-drupal-link-system-path="the-interns"] {
+  color: blue;
+}
+
+/* <a href="/league/blog/nhl" data-drupal-link-system-path="league/blog/nhl">NHL Blog</a> 
+  This is the selector for "NHL Blog"
+*/
+
+a[data-drupal-link-system-path="league/blog/nhl"] {
+  color: yellow;
+}
+
+/* <a href="/league/blog/ahl" data-drupal-link-system-path="league/blog/ahl">AHL Blog</a> 
+  This is the selector for "AHL Blog"
+*/
+
+a[data-drupal-link-system-path="league/blog/ahl"] {
+  color: green;
+}
+
 .region-primary-menu{
   display: none;
   background: #fff;

@@ -176,6 +176,14 @@ abbr.ajax-changed {
   background: url(../../../../core/misc/icons/e32700/error.svg) no-repeat;
   background-size: contain;
 }
+
+.node--view-mode-teaser {
+  background-color: #23527c;
+}
+
+.node__content, .node__submitted {
+  display: none;
+}
 .node__content > .field {
   margin-bottom: 15px;
 }

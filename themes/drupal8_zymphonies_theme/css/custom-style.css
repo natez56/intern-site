@@ -548,7 +548,7 @@ nav h2{
   border: 1px solid #eee;
   font-size: 12px;
   margin-bottom: 5px;
-  display: block;
+  display: none;
 }
 
 .comment-wrap .author-comments h3{
@@ -628,6 +628,11 @@ article {
 
 span.quickedit-field {
   text-decoration: underline;
+  color: #FFFFFF;
+}
+
+span.quickedit-field a{
+  color: #FFFFFF;
 }
 
 .dialog-off-canvas-main-canvas {

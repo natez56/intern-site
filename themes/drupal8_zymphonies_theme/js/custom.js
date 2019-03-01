@@ -19,5 +19,14 @@ jQuery(document).ready(function($){
 	jQuery('.flexslider').flexslider({
     	animation: "slide"	
     });
-    
+		
+	$('selector').onmousehover( function(){
+	$(this).find("div").html(
+		<div>
+			<a href="/home/submenu1">home submenu1</a>
+			<a href="/home/submenu2">home submenu2</a>
+			<a href="/home/submenu3">home submenu3</a>
+		</div>
+	)
+	})
 });

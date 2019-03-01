@@ -46,7 +46,7 @@ a{
 }
 
 a:hover{
-  color: #1bd3df;
+  color: hotpink;
 }
 
 ul.links.inline{
@@ -339,9 +339,20 @@ nav h2{
   z-index: 9999;
 }
 
+/* <a href="/home/submenu" title="testing twig out">sub home menu</a> 
+  this is the selector for sub menu 1
+*/
+a[title="testing twig out"] {
+  color: red;
+}
 /* <a href="/" data-drupal-link-system-path="<front>" class="is-active">Home</a> 
   This is the selector for "Home"
 */
+
+a[data-drupal-link-system-path="<front>"] {
+  color: red;
+  /* animation: pulse .5s infinite; */
+}
 
 a[data-drupal-link-system-path="<front>"] {
   color: red;
@@ -379,6 +390,39 @@ a[data-drupal-link-system-path="league/blog/nhl"] {
 
 a[data-drupal-link-system-path="league/blog/ahl"] {
   color: green;
+}
+
+.c_menu {
+  position: relative;
+  display: inline-block;
+}
+
+.test-class {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 1000px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.test-class a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.test-class a:hover {
+  background-color: #ddd;
+}
+
+.c_menu:hover .test-class {
+  display: block;
+}
+
+.c_menu:hover .dropbutton {
+  background-color: #3e8e41;
 }
 
 .region-primary-menu{

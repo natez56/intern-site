@@ -82,6 +82,7 @@
 
   .social-media a{
     margin: 0 0 0 10px;
+    border-radius: 50%;
   }
 
   /*comment*/

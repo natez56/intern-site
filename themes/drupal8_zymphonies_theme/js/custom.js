@@ -44,6 +44,7 @@ jQuery(document).ready(function($){
   //                           </a>
 
 	$('.has-submenu').click(function() {
-		alert('this is working now, maybe?')
+		// alert('this is working now, maybe?')
+		$(this).append("bwahahha");
 	});
 });

@@ -271,7 +271,7 @@ ul.links.inline li{
 }
 
 .social-media a:hover{
-  opacity: .5;
+  background-color: #000;
 }
 
 /*FORM*/

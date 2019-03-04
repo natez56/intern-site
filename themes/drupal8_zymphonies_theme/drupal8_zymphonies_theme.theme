@@ -94,10 +94,13 @@ function drupal8_zymphonies_theme_preprocess_page(&$variables) {
 
   // Social media global variable.
   $variables['show_social_icon'] = theme_get_setting('show_social_icon');
-  $variables['facebook_url'] = theme_get_setting('facebook_url');
+  // $variables['facebook_url'] = theme_get_setting('facebook_url');
+  $variables['facebook_url'] = "#";
   $variables['google_plus_url'] = theme_get_setting('google_plus_url');
-  $variables['twitter_url'] = theme_get_setting('twitter_url');
+  // $variables['twitter_url'] = theme_get_setting('twitter_url');
+  $variables['twitter_url'] = "#";
   $variables['linkedin_url'] = theme_get_setting('linkedin_url');
+  $variables['linkedin_url'] = "#";
   $variables['pinterest_url'] = theme_get_setting('pinterest_url');
   $variables['rss_url'] = theme_get_setting('rss_url');
   $variables['copyright_text'] = theme_get_setting('copyright_text');  

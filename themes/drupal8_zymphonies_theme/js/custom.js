@@ -75,13 +75,19 @@ jQuery(document).ready(function($){
 		// $("[title='testing twig out']").append("<li>bwahahha</li>");
 		// $("[title='testing twig out']").append("<li>bwahahha22222</li>");
 		// $("[title='testing twig out']").append("<li>bwahahha33333</li>");
-		$(".c-menu-__item").append("<li><a href='/home/submenu1'>submenu1</a></li>");
+		$(".c-menu-__item").append("<li><a href='/home/submenu1'>submenu1</a></li>").fadeIn();
 		// $(".c-menu-__item).append("<li><a href='/home/submenu2'>submenu2</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu3'>submenu3</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu4'>submenu4</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu5'>submenu5</a></li>");
-	},
-	setTimeout(function() {
-		$(".c-menu-__item").find("li").remove();
-	}, 3000));
+	})
+	// setTimeout(function() {
+	// 	$(".c-menu-__item").find("li").remove();
+	// }, 3000));
+	setTimeout(function(){
+		$('.c-menu-__item').mouseleave(function() {
+			$('.c-menu-__item').find("li").remove();
+		});
+	}, 3000)
+
 })

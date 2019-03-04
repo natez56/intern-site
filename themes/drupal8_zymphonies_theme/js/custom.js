@@ -66,14 +66,22 @@ jQuery(document).ready(function($){
 		// $(".test-class").removeAttr("max-width");
 		// $(".test-class").css("width", "auto");
 		$(".test-class").css("height", "auto");
-		// $("[title='testing twig out']").append("bwahahha");
+
+{/* <li class="c-menu-__item">
+                                <a href="/home/submenu" title="testing twig out">sub home menubwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahha</a>
+                                                                                </li> */}
+
+		// $(".c-menu-__item").append("bwahahha");
 		// $("[title='testing twig out']").append("<li>bwahahha</li>");
 		// $("[title='testing twig out']").append("<li>bwahahha22222</li>");
 		// $("[title='testing twig out']").append("<li>bwahahha33333</li>");
-		$("[title='testing twig out']").append("<a href='/home/submenu1'>submenu1</a>");
-		// $("[title='testing twig out']").append("<li><a href='/home/submenu2'>submenu2</a></li>");
+		$(".c-menu-__item").append("<li><a href='/home/submenu1'>submenu1</a></li>");
+		// $(".c-menu-__item).append("<li><a href='/home/submenu2'>submenu2</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu3'>submenu3</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu4'>submenu4</a></li>");
 		// $("[title='testing twig out']").append("<li><a href='/home/submenu5'>submenu5</a></li>");
-	});
-})'
+	},
+	setTimeout(function() {
+		$(".c-menu-__item").find("li").remove();
+	}, 3000));
+})

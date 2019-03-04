@@ -57,37 +57,16 @@ jQuery(document).ready(function($){
 //		size attributes
 
 	$('.has-submenu').hover(function() {
-		// alert('this is working now, maybe?')
-		//<a href="/home/submenu" title="testing twig out">sub home menu</a>
-		// $(".has-submenu").append("bwaahhaha");
 		$(".test-class").css("min-width", "");
 		$(".test-class").css("max-width", "");
-		// $(".test-class").removeAttr("min-width");
-		// $(".test-class").removeAttr("max-width");
-		// $(".test-class").css("width", "auto");
 		$(".test-class").css("height", "auto");
-
-{/* <li class="c-menu-__item">
-                                <a href="/home/submenu" title="testing twig out">sub home menubwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahha</a>
-                                                                                </li> */}
-
-		// $(".c-menu-__item").append("bwahahha");
-		// $("[title='testing twig out']").append("<li>bwahahha</li>");
-		// $("[title='testing twig out']").append("<li>bwahahha22222</li>");
-		// $("[title='testing twig out']").append("<li>bwahahha33333</li>");
-		$(".c-menu-__item").append("<li><a href='/home/submenu1'>submenu1</a></li>").fadeIn();
-		// $(".c-menu-__item).append("<li><a href='/home/submenu2'>submenu2</a></li>");
-		// $("[title='testing twig out']").append("<li><a href='/home/submenu3'>submenu3</a></li>");
-		// $("[title='testing twig out']").append("<li><a href='/home/submenu4'>submenu4</a></li>");
-		// $("[title='testing twig out']").append("<li><a href='/home/submenu5'>submenu5</a></li>");
-	})
-	// setTimeout(function() {
-	// 	$(".c-menu-__item").find("li").remove();
-	// }, 3000));
-	setTimeout(function(){
-		$('.c-menu-__item').mouseleave(function() {
-			$('.c-menu-__item').find("li").remove();
-		});
-	}, 3000)
-
+		$("[title='testing twig out']").remove();
+		$(".dagosMenu").remove();
+		$(".c-menu-__item").append("<div class='dagosMenu'></div>")
+		$(".dagosMenu").append("<li><a href='/home/submenu1'>submenu1</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu2'>submenu2</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu3'>submenu3</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu4'>submenu4</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu5'>submenu5</a></li>");
+	});
 })

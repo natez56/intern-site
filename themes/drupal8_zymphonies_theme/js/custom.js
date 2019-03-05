@@ -19,47 +19,9 @@ jQuery(document).ready(function($){
 	jQuery('.flexslider').flexslider({
     	animation: "slide"	
 		});
-
-		
-/* <ul class="test-class sm-nowrap" id="sm-1551718174147889-2" role="group" aria-hidden="true" aria-labelledby="sm-1551718174147889-1" aria-expanded="false" style="width: auto; display: none; top: auto; left: 0px; margin-left: 0px; margin-top: 0px; min-width: 10em; max-width: 20em;">
- <li class="c-menu-__item">
-<a href="/home/submenu" title="testing twig out">sub home menu</a>
-</li>
-</ul>*/
-		
-	// $('#sm-1551718174147889-2').onmousehover( function(){
-	// 	// event.preventDefault() ??? 
-	// 	alert('this is the correct selector');
- 	// // $(this).find("div").html(
-	// // 	<div>
-	// // 		<a href="/home/submenu1">home submenu1</a>
-	// // 		<a href="/home/submenu2">home submenu2</a>
-	// // 		<a href="/home/submenu3">home submenu3</a>
-	// // 	</div>
-	// )
-	// })
-
-	// <a href="/" data-target="#" data-toggle="dropdown" class="has-submenu" id="sm-15517204866664756-1" aria-haspopup="true" aria-controls="sm-15517204866664756-2" aria-expanded="false"><span class="sub-arrow">+</span>
-  //                               Home
-  //                           </a>
-
-{/* <ul class="test-class" id="sm-15517228168742236-2" role="group" aria-hidden="true" aria-labelledby="sm-15517228168742236-1" aria-expanded="false" style="width: 20em; display: none; top: auto; left: 0px; margin-left: 0px; margin-top: 0px; min-width: 10em; max-width: 20em;">
-                                                                                                                        <li class="c-menu-__item">
-                                <a href="/home/submenu" title="testing twig out">sub home menubwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahhabwahahha</a>
-                                                                                </li>
-                                    </ul> */}
-
-//the plan
-//1. append the links in the menu using the <a> and <li>
-//2. fiddle with it until it works
-//3. adjust the size of the container to match the links via
-//		flex? some sort of auto adjusting size, auto margin or auto size or auto grid
-//		size attributes
-
+	
+	//this function appends a dropdown menu on hover using jquery
 	$('.has-submenu').hover(function() {
-		$(".test-class").css("min-width", "");
-		$(".test-class").css("max-width", "");
-		$(".test-class").css("height", "auto");
 		$("[title='testing twig out']").remove();
 		$(".dagosMenu").remove();
 		$(".c-menu-__item").append("<div class='dagosMenu'></div>")

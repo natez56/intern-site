@@ -785,3 +785,24 @@ table tfoot .links a{
 #edit-submit {
   margin: 10px 0;
 }
+
+/* <ul class="test-class sm-nowrap" id="sm-15517446269997783-2" role="group" aria-hidden="false" aria-labelledby="sm-15517446269997783-1" aria-expanded="true" style="width: auto; display: block; top: auto; left: 0px; margin-left: 0px; margin-top: 0px; z-index: 2; min-width: 10em; max-width: 20em;"> */
+
+/* .test-class .sm-nowrap {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.dagosMenu {
+  color: hotpink;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+} */

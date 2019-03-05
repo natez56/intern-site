@@ -628,12 +628,8 @@ article {
 
 span.quickedit-field {
   text-decoration: underline;
-  color: #FFFFFF;
 }
 
-span.quickedit-field a{
-  color: #FFFFFF;
-}
 
 .dialog-off-canvas-main-canvas {
   background: #f5f5f5;

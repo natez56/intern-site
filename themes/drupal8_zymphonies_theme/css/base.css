@@ -178,7 +178,7 @@ abbr.ajax-changed {
 }
 
 .node--view-mode-teaser {
-  background-color: #23527c;
+  background-color: #ffffff;
 }
 
 .node__content, .node__submitted {
@@ -280,4 +280,18 @@ details[open] details summary {
 .system-modules td summary {
   /* fix for modules page */
   background-color: transparent;
+}
+
+.glyphicon {
+  font-size: 50px;
+}
+
+#close {
+  position: absolute; 
+  right: 6px; 
+  top: 20%;
+}
+
+#expand {
+  position: absolute;
 }

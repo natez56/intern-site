@@ -1,7 +1,7 @@
 global-css:
   css:
     theme:
-      css/style.css: {}
+      css/my_theme.css: {}
 
 global-js:
   js:

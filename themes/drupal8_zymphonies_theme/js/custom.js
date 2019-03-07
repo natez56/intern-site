@@ -8,16 +8,6 @@ jQuery(document).ready(function($){
 		$('.region-primary-menu').slideToggle();
 	});
 
-	// $('.down').bind('click', function(){
-	//     $(this).hide();
-	//     $(this).siblings().show();
-	// });
-
-	// $('.up').bind('click', function(){
-	//     $(this).hide();
-	//     $(this).siblings().show();
-	// });
-
 	//Mobile dropdown menu
 	if ( $(window).width() < 767) {
 		$(".region-primary-menu li a:not(.has-submenu)").click(function () {

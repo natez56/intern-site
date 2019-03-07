@@ -181,9 +181,6 @@ abbr.ajax-changed {
   background-color: #ffffff;
 }
 
-.node__content, .node__submitted {
-  display: none;
-}
 .node__content > .field {
   margin-bottom: 15px;
 }

@@ -75,12 +75,14 @@
 %}
 {{ attach_library('classy/node') }}
 <article{{ attributes.addClass(classes) }}>
-
+  {{ dsm(attributes) }}
   {{ title_prefix }}
   {% if not page %}
     <h2{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
     </h2>
+    <a href="#" class="down" onClick='expand({{ node.id }});'><i class="fas fa-angle-double-down"></i></a>
+    <a href="#" class="up" onClick='shrink({{ node.id }});'><i class="fas fa-angle-double-up"></i></a>
   {% endif %}
   {{ title_suffix }}
 
@@ -96,5 +98,5 @@
   <div{{ content_attributes.addClass('node__content') }}>
     {{ content }}
   </div>
-
+  <a href="#" class="close" onClick='closeNotification({{ node.id }});'><i class="fas fa-times"></i></a>
 </article>

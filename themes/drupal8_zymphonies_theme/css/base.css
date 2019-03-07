@@ -176,6 +176,14 @@ abbr.ajax-changed {
   background: url(../../../../core/misc/icons/e32700/error.svg) no-repeat;
   background-size: contain;
 }
+
+.node--view-mode-teaser {
+  background-color: #ffffff;
+}
+
+.node__content, .node__submitted {
+  display: none;
+}
 .node__content > .field {
   margin-bottom: 15px;
 }
@@ -272,4 +280,23 @@ details[open] details summary {
 .system-modules td summary {
   /* fix for modules page */
   background-color: transparent;
+}
+
+.glyphicon {
+  font-size: 50px;
+}
+
+.close {
+  position: absolute; 
+  right: 6px; 
+  top: 20%;
+  color: #078D92;
+}
+
+.expand {
+  position: absolute;
+}
+
+.up {
+  display: none;
 }

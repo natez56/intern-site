@@ -286,12 +286,17 @@ details[open] details summary {
   font-size: 50px;
 }
 
-#close {
+.close {
   position: absolute; 
   right: 6px; 
   top: 20%;
+  color: #078D92;
 }
 
-#expand {
+.expand {
   position: absolute;
+}
+
+.up {
+  display: none;
 }

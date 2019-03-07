@@ -20,11 +20,11 @@ jQuery(document).ready(function($){
     	animation: "slide"	
 		});
 	
-	//this function appends a dropdown menu on hover using jquery
+	//this appends links to the dropdown menu use jquery overriding the drupal UI
 	$('.has-submenu').hover(function() {
 		$("[title='testing twig out']").remove();
 		$(".dagosMenu").remove();
-		$(".c-menu-__item").append("<div class='dagosMenu'></div>")
+		$(".c-menu-__item").append("<div class='dagosMenu'></div>");
 		$(".dagosMenu").append("<li><a href='/home/submenu1'>submenu1</a></li>");
 		$(".dagosMenu").append("<li><a href='/home/submenu2'>submenu2</a></li>");
 		$(".dagosMenu").append("<li><a href='/home/submenu3'>submenu3</a></li>");

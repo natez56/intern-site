@@ -17,7 +17,7 @@ features:
    name: true
    node_user_picture: true
    slogan: true
-facebook_url: 'https://www.facebook.com/zymphonies'
+facebook_url: '#'
 twitter_url: 'https://twitter.com/zymphonies'
 google_plus_url: 'https://plus.google.com/+ZymphoniesTechnologies'
 linkedin_url: 'http://www.linkedin.com/company/zymphonies'

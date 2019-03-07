@@ -47,3 +47,6 @@ sites/default/sync
 #
 #
 currentsession.txt
+sites/default/local.services.yml
+sites/default/local.services.yml
+sites/default/local.setting.php

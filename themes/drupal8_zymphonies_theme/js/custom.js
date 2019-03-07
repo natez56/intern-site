@@ -18,6 +18,19 @@ jQuery(document).ready(function($){
 	//flexslider
 	jQuery('.flexslider').flexslider({
     	animation: "slide"	
-    });
-    
+		});
+
+		//this appends links to the dropdown menu use jquery overriding the drupal UI
+	$('[data-toggle="dropdown"]').hover(function() {
+		$("[title='testing twig out']").remove();
+		$("[href='/home/submenu']").remove();
+		$(".dagosMenu").remove();
+		$(".dropdown-menu").append("<div class='dagosMenu'></div>");
+		$(".dagosMenu").append("<li><a href='/home/submenu1'>submenu1</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu2'>submenu2</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu3'>submenu3</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu4'>submenu4</a></li>");
+		$(".dagosMenu").append("<li><a href='/home/submenu5'>submenu5</a></li>");
+	});
+
 });

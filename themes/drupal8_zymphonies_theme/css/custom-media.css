@@ -1,3 +1,4 @@
+
 @media (min-width: 768px) {
 
   .middlewidget{
@@ -9,10 +10,8 @@
   }
 
   .region-primary-menu{
-    display: inline-block !important;
-    float: right;
-    width: auto;
-    margin: 0;
+    display: block !important;
+    width: 100%;
   }
 
   .region-primary-menu,

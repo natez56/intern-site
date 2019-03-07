@@ -19,6 +19,7 @@ global-components:
       css/base.css: {}
       css/custom-style.css: {}
       css/custom-media.css: {}
+      css/custom-left-menu.css: {}
   js:
     js/custom.js: {}
   dependencies:

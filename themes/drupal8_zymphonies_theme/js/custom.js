@@ -23,6 +23,7 @@ jQuery(document).ready(function($){
 	//this appends links to the dropdown menu use jquery overriding the drupal UI
 	$('.has-submenu').hover(function() {
 		$("[title='testing twig out']").remove();
+		$("[href='/home/submenu']").remove();
 		$(".dagosMenu").remove();
 		$(".c-menu-__item").append("<div class='dagosMenu'></div>");
 		$(".dagosMenu").append("<li><a href='/home/submenu1'>submenu1</a></li>");

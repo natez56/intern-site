@@ -21,7 +21,7 @@ jQuery(document).ready(function($){
 		});
 
 		//this appends links to the dropdown menu use jquery overriding the drupal UI
-	$('[data-toggle="dropdown"]').hover(function() {
+	$('[data-toggle="dropdown"]').mouseover(function() {
 		$("[title='testing twig out']").remove();
 		$("[href='/home/submenu']").remove();
 		$(".dagosMenu").remove();
